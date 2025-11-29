@@ -64,7 +64,7 @@ def build_label_mappings(train_dataset):
 # -----------------------------
 # 4. Tokenization & label encoding
 # -----------------------------
-def tokenize_and_encode(train_dataset, val_dataset, test_dataset, label2id, model_name="bert-base-uncased"):
+def tokenize_and_encode(train_dataset, val_dataset, test_dataset, label2id, model_name="roberta-base"):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     def tokenize_function(examples):
@@ -124,7 +124,7 @@ def create_dataloaders(train_dataset, val_dataset, test_dataset,
 # 6. Training loop (Subtask 1)
 # -----------------------------
 def train_clarity_model(
-    model_name="bert-base-uncased",
+    model_name="roberta-base",
     num_epochs=3,
     train_batch_size=16,
     eval_batch_size=32,
@@ -255,7 +255,7 @@ def predict_and_save(model, test_loader, id2label, output_path="clarity_predicti
 # -----------------------------
 if __name__ == "__main__":
     model, tokenizer, label2id, id2label, test_loader = train_clarity_model(
-        model_name="bert-base-uncased",
+        model_name="roberta-base",
         num_epochs=3,
         train_batch_size=16,
         eval_batch_size=32,
