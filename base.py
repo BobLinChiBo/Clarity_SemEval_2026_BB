@@ -170,6 +170,10 @@ def train_clarity_model(
     optimizer = AdamW(model.parameters(), lr=learning_rate)
 
     # -------- Training loop --------
+    best_val_f1 = 0.0
+    best_model_state = None
+    training_history = []
+
     for epoch in range(1, num_epochs + 1):
         model.train()
         total_loss = 0.0
@@ -213,8 +217,73 @@ def train_clarity_model(
                 all_preds.extend(preds)
 
         val_f1 = f1_score(all_labels, all_preds, average="macro")
+        report_str = classification_report(all_labels, all_preds, target_names=[id2label[i] for i in range(num_labels)])
         print(f"Epoch {epoch}/{num_epochs} - Train Loss: {avg_train_loss:.4f}, Val Macro-F1: {val_f1:.4f}")
-        print(classification_report(all_labels, all_preds, target_names=[id2label[i] for i in range(num_labels)]))
+        print(report_str)
+
+        training_history.append({
+            "epoch": epoch,
+            "train_loss": avg_train_loss,
+            "val_f1": val_f1,
+        })
+
+        if val_f1 > best_val_f1:
+            best_val_f1 = val_f1
+            best_model_state = {k: v.cpu().clone() for k, v in model.state_dict().items()}
+            print(f"[Epoch {epoch}] New best macro F1 = {val_f1:.4f}")
+
+    # Load best model
+    if best_model_state is not None:
+        print(f"\nLoading best model state (macro F1 = {best_val_f1:.4f})")
+        model.load_state_dict(best_model_state)
+
+        # Save best model checkpoint
+        checkpoint_path = "model_baseline_best.pt"
+        torch.save(best_model_state, checkpoint_path)
+        print(f"Saved best model checkpoint to: {checkpoint_path}")
+
+    # Final evaluation
+    model.eval()
+    all_preds = []
+    all_labels = []
+
+    with torch.no_grad():
+        for batch in val_loader:
+            labels = batch["labels"].numpy()
+            all_labels.extend(labels)
+
+            batch = {k: v.to(device) for k, v in batch.items() if k != "labels"}
+
+            outputs = model(
+                input_ids=batch["input_ids"],
+                attention_mask=batch["attention_mask"],
+            )
+            logits = outputs.logits
+            preds = torch.argmax(logits, dim=-1).cpu().numpy()
+            all_preds.extend(preds)
+
+    final_f1 = f1_score(all_labels, all_preds, average="macro")
+    final_report = classification_report(all_labels, all_preds, target_names=[id2label[i] for i in range(num_labels)])
+    print("\nFinal validation report:")
+    print(final_report)
+
+    # Save training summary
+    import json
+    summary = {
+        "model_name": model_name,
+        "seed": seed,
+        "learning_rate": learning_rate,
+        "num_epochs": num_epochs,
+        "best_val_f1": best_val_f1,
+        "final_val_f1": final_f1,
+        "training_history": training_history,
+        "final_classification_report": final_report,
+    }
+
+    summary_path = "results_baseline.json"
+    with open(summary_path, "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
+    print(f"\nSaved training summary to '{summary_path}'")
 
     return model, tokenizer, label2id, id2label, test_loader
 
@@ -256,7 +325,7 @@ def predict_and_save(model, test_loader, id2label, output_path="clarity_predicti
 if __name__ == "__main__":
     model, tokenizer, label2id, id2label, test_loader = train_clarity_model(
         model_name="roberta-base",
-        num_epochs=3,
+        num_epochs=5,              # Match other versions for fair comparison
         train_batch_size=16,
         eval_batch_size=32,
         learning_rate=2e-5,

@@ -1,0 +1,114 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+.venv_clarity/
+venv/
+ENV/
+env/
+
+# Data files (downloaded automatically on first run)
+data/
+
+# Model checkpoints (too large, can regenerate)
+models/
+*.pt
+model_*.pt
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Claude configuration (user-specific)
+.claude/
+
+# =============================================================================
+# Intermediate/Experimental Files (not needed for reproduction)
+# =============================================================================
+
+# Test scripts
+test_*.py
+check_*.py
+
+# Experimental/archived training scripts
+base_nli_topic.py
+train_topic_shift_tiage.py
+precompute_topic_shift_features.py
+train_deberta_nli.py
+train_nli_focal.py
+train_all_models.py
+ensemble_simple.py
+ensemble_two_stage.py
+ensemble_best_models.py
+
+# Intermediate predictions (keep only final ensemble)
+clarity_predictions.txt
+clarity_predictions_baseline*.txt
+clarity_predictions_nli.txt
+clarity_predictions_nli_*.txt
+!clarity_predictions_multiseed_ensemble.txt
+
+# Intermediate results JSON (keep only fair evaluation)
+results_baseline.json
+results_nli.json
+results_nli_weighted.json
+results_nli_focal.json
+results_nli_topic.json
+results_nli_weighted_seed*.json
+results_multiseed_ensemble.json
+ensemble_cv_results.json
+validation_seed_analysis.json
+ensemble_best_threshold.txt
+!results_multiseed_fair_eval.json
+
+# Excessive markdown documentation (keep only README)
+ARCHITECTURE_COMPARISON.md
+EXPERIMENT_RESULTS.md
+FINAL_EXPERIMENT_SUMMARY.md
+FINAL_RESULTS_10EP.md
+FINAL_RESULTS_MULTISEED.md
+IMPROVEMENT_ROADMAP.md
+LOGIC_VERIFICATION.md
+PROJECT_STATUS_REPORT.md
+README_NLI.md
+README_TOPIC_SHIFT.md
+RESULTS_SUMMARY.md
+RESULTS_SUMMARY_FINAL.md
+TIAGE_CLASS_IMBALANCE_RESOLVED.md
+TOPIC_SHIFT_FIX.md
+VALIDATION_VERIFICATION_RESULTS.md
+FILE_CATEGORIZATION.md

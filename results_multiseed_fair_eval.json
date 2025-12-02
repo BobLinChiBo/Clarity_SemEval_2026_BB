@@ -1,0 +1,19 @@
+{
+  "seeds": [
+    21,
+    42,
+    84
+  ],
+  "validation_seed": 999,
+  "note": "Fair evaluation - validation seed different from all training seeds",
+  "individual_f1s": [
+    0.8022699334848867,
+    0.7315111014091499,
+    0.7079309335674568
+  ],
+  "mean_individual_f1": 0.7472373228204979,
+  "std_individual_f1": 0.04008696593045561,
+  "ensemble_f1": 0.8046774644433126,
+  "improvement_over_best": 0.0024075309584258298,
+  "ensemble_report": "                 precision    recall  f1-score   support\n\n     Ambivalent      0.911     0.794     0.848       218\nClear Non-Reply      0.738     0.969     0.838        32\n    Clear Reply      0.670     0.798     0.728        94\n\n       accuracy                          0.811       344\n      macro avg      0.773     0.853     0.805       344\n   weighted avg      0.829     0.811     0.814       344\n"
+}
