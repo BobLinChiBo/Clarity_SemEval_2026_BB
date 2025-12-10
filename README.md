@@ -55,7 +55,7 @@ Political figures often evade direct answers to difficult questions. This projec
 | Split | Size | Labels Available |
 |-------|------|-----------------|
 | Train | 3,448 | ✅ Yes |
-| Test | 308 | ❌ No |
+| Test | 308 |  ✅ Yes |
 
 **Example**:
 ```
